@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, Play, Zap, Link, Palette, Shield, BarChart3, Rocket, Menu, X } from 'lucide-react';
 import { Route, Routes ,useNavigate } from 'react-router-dom';
 import Index from '@/pages/Index';
+import Logo from './Logo';
 
 interface FeatureCard {
   icon: React.ReactNode;
@@ -96,7 +97,7 @@ const LandingPage: React.FC = () => {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
-              FlowForge
+              <Logo />
             </div>
 
             {/* Desktop Navigation */}
