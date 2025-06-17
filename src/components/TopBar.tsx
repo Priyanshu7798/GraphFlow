@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -71,6 +70,10 @@ const TopBar = ({ nodes, edges }: TopBarProps) => {
     return nodes.filter(node => node.type === type).length;
   };
 
+  const getAINodeCount = () => {
+    return nodes.filter(node => node.type === 'openai' || node.type === 'gemini').length;
+  };
+
   return (
     <>
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -103,6 +106,9 @@ const TopBar = ({ nodes, edges }: TopBarProps) => {
               </Badge>
               <Badge variant="secondary" className="text-xs">
                 Logic: {getNodeCountByType('condition') + getNodeCountByType('code') + getNodeCountByType('merge')}
+              </Badge>
+              <Badge variant="secondary" className="text-xs">
+                AI: {getAINodeCount()}
               </Badge>
             </div>
             

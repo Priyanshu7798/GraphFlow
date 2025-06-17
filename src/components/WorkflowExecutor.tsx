@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,6 @@ const WorkflowExecutor = ({ nodes, edges, onClose, onExecutionComplete }: Workfl
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Initialize execution steps based on nodes
     const executionSteps: ExecutionStep[] = nodes.map((node, index) => ({
       id: `step-${index}`,
       nodeId: node.id,
@@ -41,37 +39,127 @@ const WorkflowExecutor = ({ nodes, edges, onClose, onExecutionComplete }: Workfl
     setSteps(executionSteps);
   }, [nodes]);
 
+  const executeOpenAI = async (node: Node) => {
+    const apiKey = node.data?.apiKey as string;
+    const model = (node.data?.model as string) || 'gpt-3.5-turbo';
+    const prompt = node.data?.prompt as string;
+    const temperature = (node.data?.temperature as number) || 0.7;
+
+    if (!apiKey || !prompt) {
+      throw new Error('API key and prompt are required');
+    }
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature,
+        max_tokens: 1000,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return {
+      status: 'completed',
+      response: data.choices[0]?.message?.content || 'No response',
+      model,
+      usage: data.usage,
+      prompt
+    };
+  };
+
+  const executeGemini = async (node: Node) => {
+    const apiKey = node.data?.apiKey as string;
+    const model = (node.data?.model as string) || 'gemini-pro';
+    const prompt = node.data?.prompt as string;
+    const temperature = (node.data?.temperature as number) || 0.7;
+
+    if (!apiKey || !prompt) {
+      throw new Error('API key and prompt are required');
+    }
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: prompt }]
+        }],
+        generationConfig: {
+          temperature,
+          maxOutputTokens: 1000,
+        }
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Gemini API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return {
+      status: 'completed',
+      response: data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response',
+      model,
+      prompt
+    };
+  };
+
   const simulateExecution = async () => {
     setIsRunning(true);
     
     for (let i = 0; i < steps.length; i++) {
-      // Update current step to running
       setSteps(prev => prev.map((step, index) => 
         index === i ? { ...step, status: 'running' } : step
       ));
       setCurrentStep(i);
       
-      // Simulate execution time
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+      const node = nodes[i];
+      let output: any;
+      let error: string | undefined;
       
-      // Simulate success/failure (90% success rate)
-      const isSuccess = Math.random() > 0.1;
+      try {
+        if (node.type === 'openai') {
+          output = await executeOpenAI(node);
+        } else if (node.type === 'gemini') {
+          output = await executeGemini(node);
+        } else {
+          // Simulate execution for other node types
+          await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+          output = generateMockOutput(node);
+        }
+      } catch (err) {
+        error = err instanceof Error ? err.message : 'Execution failed';
+        console.error('Node execution failed:', err);
+      }
+      
       const duration = Math.floor(500 + Math.random() * 2000);
       
       setSteps(prev => prev.map((step, index) => 
         index === i ? { 
           ...step, 
-          status: isSuccess ? 'completed' : 'failed',
+          status: error ? 'failed' : 'completed',
           duration,
-          output: isSuccess ? generateMockOutput(nodes[i]) : undefined,
-          error: !isSuccess ? 'Execution failed due to network timeout' : undefined
+          output: output,
+          error: error
         } : step
       ));
       
       setProgress(((i + 1) / steps.length) * 100);
       
-      if (!isSuccess) {
-        break; // Stop execution on failure
+      if (error) {
+        break;
       }
     }
     
@@ -134,7 +222,6 @@ const WorkflowExecutor = ({ nodes, edges, onClose, onExecutionComplete }: Workfl
         </DialogHeader>
         
         <div className="space-y-6">
-          {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Progress</span>
@@ -143,7 +230,6 @@ const WorkflowExecutor = ({ nodes, edges, onClose, onExecutionComplete }: Workfl
             <Progress value={progress} className="w-full" />
           </div>
           
-          {/* Execution Steps */}
           <div className="space-y-4">
             <h3 className="font-medium text-gray-900">Execution Steps</h3>
             <div className="space-y-3">
@@ -193,7 +279,6 @@ const WorkflowExecutor = ({ nodes, edges, onClose, onExecutionComplete }: Workfl
             </div>
           </div>
           
-          {/* Action Buttons */}
           <div className="flex justify-between pt-4 border-t">
             <Button variant="outline" onClick={onClose}>
               Close

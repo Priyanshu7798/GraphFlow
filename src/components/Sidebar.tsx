@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +11,9 @@ import {
   Database,
   Calendar,
   FileText,
-  Bell
+  Bell,
+  Brain,
+  Sparkles
 } from 'lucide-react';
 
 const nodeCategories = [
@@ -39,6 +40,13 @@ const nodeCategories = [
       { type: 'condition', label: 'If Condition', icon: Filter, description: 'Conditional logic' },
       { type: 'code', label: 'Code Block', icon: Code, description: 'Custom code execution' },
       { type: 'merge', label: 'Merge Data', icon: Users, description: 'Merge multiple inputs' },
+    ]
+  },
+  {
+    category: 'AI',
+    nodes: [
+      { type: 'openai', label: 'OpenAI', icon: Brain, description: 'OpenAI GPT integration' },
+      { type: 'gemini', label: 'Gemini', icon: Sparkles, description: 'Google Gemini integration' },
     ]
   },
   {
