@@ -23,8 +23,8 @@ const GeminiNode = ({ data, selected }: NodeProps<GeminiNodeData>) => {
             <Sparkles className="h-5 w-5 text-purple-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-medium text-gray-900">{(data?.label as string) || 'Gemini'}</h4>
-            <p className="text-sm text-gray-500">{(data?.description as string) || 'Google Gemini API integration'}</p>
+            <h4 className="font-medium text-gray-900">{data?.label || 'Gemini'}</h4>
+            <p className="text-sm text-gray-500">{data?.description || 'Google Gemini API integration'}</p>
           </div>
           <Badge variant="secondary" className="text-xs">
             AI

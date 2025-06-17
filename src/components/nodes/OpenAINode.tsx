@@ -23,8 +23,8 @@ const OpenAINode = ({ data, selected }: NodeProps<OpenAINodeData>) => {
             <Brain className="h-5 w-5 text-green-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-medium text-gray-900">{(data?.label as string) || 'OpenAI'}</h4>
-            <p className="text-sm text-gray-500">{(data?.description as string) || 'OpenAI API integration'}</p>
+            <h4 className="font-medium text-gray-900">{data?.label || 'OpenAI'}</h4>
+            <p className="text-sm text-gray-500">{data?.description || 'OpenAI API integration'}</p>
           </div>
           <Badge variant="secondary" className="text-xs">
             AI
