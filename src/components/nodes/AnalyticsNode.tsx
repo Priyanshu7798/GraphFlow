@@ -5,7 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BarChart3 } from 'lucide-react';
 
-const AnalyticsNode = ({ data, selected }: NodeProps) => {
+interface AnalyticsNodeData {
+  label: string;
+  description: string;
+}
+
+const AnalyticsNode = ({ data, selected }: NodeProps<AnalyticsNodeData>) => {
   return (
     <Card className={`min-w-[200px] ${selected ? 'ring-2 ring-blue-500' : ''}`}>
       <div className="p-4">

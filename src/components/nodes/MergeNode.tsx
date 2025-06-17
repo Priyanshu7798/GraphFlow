@@ -5,7 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Users } from 'lucide-react';
 
-const MergeNode = ({ data, selected }: NodeProps) => {
+interface MergeNodeData {
+  label: string;
+  description: string;
+}
+
+const MergeNode = ({ data, selected }: NodeProps<MergeNodeData>) => {
   return (
     <Card className={`min-w-[200px] ${selected ? 'ring-2 ring-blue-500' : ''}`}>
       <div className="p-4">

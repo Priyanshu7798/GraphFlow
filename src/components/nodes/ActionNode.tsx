@@ -5,7 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Mail, Database, Calendar, FileText, Bell } from 'lucide-react';
 
-const ActionNode = ({ data, selected }: NodeProps) => {
+interface ActionNodeData {
+  label: string;
+  description: string;
+}
+
+const ActionNode = ({ data, selected }: NodeProps<ActionNodeData>) => {
   const getIcon = () => {
     if (data.label?.includes('Email')) return Mail;
     if (data.label?.includes('Database')) return Database;

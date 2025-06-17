@@ -5,7 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Code } from 'lucide-react';
 
-const CodeNode = ({ data, selected }: NodeProps) => {
+interface CodeNodeData {
+  label: string;
+  description: string;
+}
+
+const CodeNode = ({ data, selected }: NodeProps<CodeNodeData>) => {
   return (
     <Card className={`min-w-[200px] ${selected ? 'ring-2 ring-blue-500' : ''}`}>
       <div className="p-4">

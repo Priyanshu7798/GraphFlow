@@ -5,7 +5,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Zap, Clock, ArrowRight } from 'lucide-react';
 
-const TriggerNode = ({ data, selected }: NodeProps) => {
+interface TriggerNodeData {
+  label: string;
+  description: string;
+}
+
+const TriggerNode = ({ data, selected }: NodeProps<TriggerNodeData>) => {
   const getIcon = () => {
     if (data.label?.includes('Schedule')) return Clock;
     if (data.label?.includes('Manual')) return ArrowRight;
