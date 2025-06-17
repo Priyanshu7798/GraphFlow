@@ -17,15 +17,15 @@ interface NodePanelProps {
 }
 
 const NodePanel = ({ node, onClose, onDelete, onDuplicate }: NodePanelProps) => {
-  const [label, setLabel] = useState(node.data?.label || '');
-  const [description, setDescription] = useState(node.data?.description || '');
+  const [label, setLabel] = useState(String(node.data?.label || ''));
+  const [description, setDescription] = useState(String(node.data?.description || ''));
   const [config, setConfig] = useState({
-    url: node.data?.url || '',
-    method: node.data?.method || 'GET',
-    headers: node.data?.headers || '',
-    timeout: node.data?.timeout || '30',
-    retries: node.data?.retries || '3',
-    condition: node.data?.condition || '',
+    url: String(node.data?.url || ''),
+    method: String(node.data?.method || 'GET'),
+    headers: String(node.data?.headers || ''),
+    timeout: String(node.data?.timeout || '30'),
+    retries: String(node.data?.retries || '3'),
+    condition: String(node.data?.condition || ''),
   });
 
   const handleConfigChange = (key: string, value: string) => {

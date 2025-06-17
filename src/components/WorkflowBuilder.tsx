@@ -14,6 +14,7 @@ import {
   ReactFlowProvider,
   useReactFlow,
   ReactFlowInstance,
+  BackgroundVariant,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -42,7 +43,7 @@ const WorkflowBuilderFlow = () => {
         id: `edge-${id++}`,
         type: 'customEdge',
         animated: true,
-      };
+      } as Edge;
       setEdges((eds) => addEdge(newEdge, eds));
       toast({
         title: "Connection Created",
@@ -166,7 +167,7 @@ const WorkflowBuilderFlow = () => {
                 maskColor="rgba(0, 0, 0, 0.1)"
               />
               <Background 
-                variant="dots" 
+                variant={BackgroundVariant.Dots}
                 gap={20} 
                 size={1} 
                 color="#e5e7eb"

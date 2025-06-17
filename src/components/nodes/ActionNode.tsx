@@ -5,18 +5,14 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Mail, Database, Calendar, FileText, Bell } from 'lucide-react';
 
-interface ActionNodeData {
-  label: string;
-  description: string;
-}
-
-const ActionNode = ({ data, selected }: NodeProps<ActionNodeData>) => {
+const ActionNode = ({ data, selected }: NodeProps) => {
   const getIcon = () => {
-    if (data.label?.includes('Email')) return Mail;
-    if (data.label?.includes('Database')) return Database;
-    if (data.label?.includes('Event')) return Calendar;
-    if (data.label?.includes('Document')) return FileText;
-    if (data.label?.includes('Notification')) return Bell;
+    const label = data?.label as string;
+    if (label?.includes('Email')) return Mail;
+    if (label?.includes('Database')) return Database;
+    if (label?.includes('Event')) return Calendar;
+    if (label?.includes('Document')) return FileText;
+    if (label?.includes('Notification')) return Bell;
     return Mail;
   };
 
@@ -30,8 +26,8 @@ const ActionNode = ({ data, selected }: NodeProps<ActionNodeData>) => {
             <Icon className="h-5 w-5 text-blue-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-medium text-gray-900">{data.label}</h4>
-            <p className="text-sm text-gray-500">{data.description}</p>
+            <h4 className="font-medium text-gray-900">{data?.label as string}</h4>
+            <p className="text-sm text-gray-500">{data?.description as string}</p>
           </div>
           <Badge variant="secondary" className="text-xs">
             Action
