@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Node } from '@xyflow/react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { X, Copy, Trash2, Brain, Sparkles } from 'lucide-react';
 
 interface NodePanelProps {
@@ -13,13 +14,43 @@ interface NodePanelProps {
   onClose: () => void;
   onDelete: (nodeId: string) => void;
   onDuplicate: (node: Node) => void;
+  onUpdateNode: (nodeId: string, data: any) => void;
 }
 
-const NodePanel = ({ node, onClose, onDelete, onDuplicate }: NodePanelProps) => {
+const NodePanel = ({ node, onClose, onDelete, onDuplicate, onUpdateNode }: NodePanelProps) => {
   const [nodeData, setNodeData] = useState(node.data);
 
+  useEffect(() => {
+    // Load saved data from localStorage on mount
+    if (node.type === 'openai' || node.type === 'gemini') {
+      const savedApiKey = localStorage.getItem(`${node.type}_apiKey_${node.id}`);
+      const savedPrompt = localStorage.getItem(`${node.type}_prompt_${node.id}`);
+      const savedModel = localStorage.getItem(`${node.type}_model_${node.id}`);
+      const savedTemperature = localStorage.getItem(`${node.type}_temperature_${node.id}`);
+      
+      if (savedApiKey || savedPrompt || savedModel || savedTemperature) {
+        const updatedData = {
+          ...nodeData,
+          apiKey: savedApiKey || nodeData.apiKey,
+          prompt: savedPrompt || nodeData.prompt,
+          model: savedModel || nodeData.model,
+          temperature: savedTemperature ? parseFloat(savedTemperature) : nodeData.temperature,
+        };
+        setNodeData(updatedData);
+        onUpdateNode(node.id, updatedData);
+      }
+    }
+  }, [node.id, node.type]);
+
   const updateNodeData = (key: string, value: string | number) => {
-    setNodeData({ ...nodeData, [key]: value });
+    const updatedData = { ...nodeData, [key]: value };
+    setNodeData(updatedData);
+    onUpdateNode(node.id, updatedData);
+    
+    // Save to localStorage for AI nodes
+    if (node.type === 'openai' || node.type === 'gemini') {
+      localStorage.setItem(`${node.type}_${key}_${node.id}`, value.toString());
+    }
   };
 
   const getNodeIcon = () => {
@@ -76,11 +107,12 @@ const NodePanel = ({ node, onClose, onDelete, onDuplicate }: NodePanelProps) => 
 
           <div>
             <Label htmlFor="prompt">Prompt</Label>
-            <Input
+            <Textarea
               id="prompt"
               value={(nodeData.prompt as string) || ''}
               onChange={(e) => updateNodeData('prompt', e.target.value)}
               placeholder="Enter your prompt"
+              rows={4}
             />
           </div>
 
@@ -142,7 +174,7 @@ const NodePanel = ({ node, onClose, onDelete, onDuplicate }: NodePanelProps) => 
         </Button>
       </div>
       
-      <div className="flex-1 p-4 space-y-6">
+      <div className="flex-1 p-4 space-y-6 overflow-y-auto">
         <Card className="p-4">
           <div className="space-y-2">
             <h4 className="font-medium text-gray-900">Node Info</h4>
