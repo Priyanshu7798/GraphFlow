@@ -80,8 +80,8 @@ const TopBar = ({ nodes, edges }: TopBarProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <GitBranch className="h-5 w-5 text-blue-600" />
-              <h1 className="text-xl font-semibold text-gray-900">Workflow Builder</h1>
+              <GitBranch className="h-7 w-7 text-blue-600" />
+              <h1 className="text-xl font-semibold text-gray-900">Graph Flow</h1>
             </div>
             
             <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -96,22 +96,7 @@ const TopBar = ({ nodes, edges }: TopBarProps) => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="text-xs">
-                Triggers: {getNodeCountByType('trigger')}
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                Actions: {getNodeCountByType('action')}
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                Logic: {getNodeCountByType('condition') + getNodeCountByType('code') + getNodeCountByType('merge')}
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                AI: {getAINodeCount()}
-              </Badge>
-            </div>
-            
+          <div className="flex items-center space-x-2">
             <div className="h-6 w-px bg-gray-300" />
             
             <div className="flex items-center space-x-2">
@@ -130,10 +115,6 @@ const TopBar = ({ nodes, edges }: TopBarProps) => {
                 Import
               </Button>
               
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-1" />
-                Settings
-              </Button>
               
               <Button 
                 onClick={handleExecute}

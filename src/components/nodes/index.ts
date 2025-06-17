@@ -5,8 +5,6 @@ import ConditionNode from './ConditionNode';
 import CodeNode from './CodeNode';
 import MergeNode from './MergeNode';
 import AnalyticsNode from './AnalyticsNode';
-import OpenAINode from './OpenAINode';
-import GeminiNode from './GeminiNode';
 
 export const nodeTypes = {
   trigger: TriggerNode,
@@ -15,6 +13,4 @@ export const nodeTypes = {
   code: CodeNode,
   merge: MergeNode,
   analytics: AnalyticsNode,
-  openai: OpenAINode,
-  gemini: GeminiNode,
 };

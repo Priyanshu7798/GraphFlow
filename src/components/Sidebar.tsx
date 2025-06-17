@@ -15,6 +15,7 @@ import {
   Brain,
   Sparkles
 } from 'lucide-react';
+import Logo from './Logo';
 
 const nodeCategories = [
   {
@@ -43,13 +44,6 @@ const nodeCategories = [
     ]
   },
   {
-    category: 'AI',
-    nodes: [
-      { type: 'openai', label: 'OpenAI', icon: Brain, description: 'OpenAI GPT integration' },
-      { type: 'gemini', label: 'Gemini', icon: Sparkles, description: 'Google Gemini integration' },
-    ]
-  },
-  {
     category: 'Analytics',
     nodes: [
       { type: 'analytics', label: 'Track Event', icon: BarChart3, description: 'Track analytics event' },
@@ -68,7 +62,7 @@ const Sidebar = () => {
   return (
     <div className="w-72 bg-white border-r border-gray-200 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-gray-100 flex-shrink-0">
-        <h2 className="text-lg font-semibold text-gray-900">Workflow Nodes</h2>
+        <Logo />
         <p className="text-sm text-gray-500 mt-1">Drag nodes to canvas</p>
       </div>
       

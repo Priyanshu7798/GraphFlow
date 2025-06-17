@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState, useRef } from 'react';
 import {
   ReactFlow,
@@ -127,6 +126,8 @@ const WorkflowBuilderFlow = () => {
     });
   }, [setNodes]);
 
+ 
+
   return (
     <div className="h-screen w-full flex bg-gray-50">
       {/* Sidebar */}
@@ -182,6 +183,7 @@ const WorkflowBuilderFlow = () => {
               onClose={() => setSelectedNode(null)}
               onDelete={deleteNode}
               onDuplicate={duplicateNode}
+              onUpdateNode={(id, data) => setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data } : n)))}
             />
           )}
         </div>
