@@ -58,39 +58,44 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 h-full overflow-y-auto">
-      <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Workflow Nodes</h2>
-        
+    <div className="w-72 bg-white border-r border-gray-200 flex flex-col h-full overflow-hidden">
+      <div className="p-4 border-b border-gray-100 flex-shrink-0">
+        <h2 className="text-lg font-semibold text-gray-900">Workflow Nodes</h2>
+        <p className="text-sm text-gray-500 mt-1">Drag nodes to canvas</p>
+      </div>
+      
+      <div className="flex-1 overflow-y-auto p-4">
         <div className="space-y-6">
           {nodeCategories.map((category) => (
-            <div key={category.category}>
-              <h3 className="text-sm font-medium text-gray-700 mb-3">{category.category}</h3>
+            <div key={category.category} className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-700 uppercase tracking-wide">
+                {category.category}
+              </h3>
               <div className="space-y-2">
                 {category.nodes.map((node, index) => {
                   const IconComponent = node.icon;
                   return (
                     <Card
                       key={`${node.type}-${index}`}
-                      className="p-3 cursor-grab hover:shadow-md transition-shadow border-gray-200"
+                      className="p-3 cursor-grab hover:shadow-md hover:border-blue-300 transition-all duration-200 border-gray-200 bg-white"
                       draggable
                       onDragStart={(e) => onDragStart(e, node.type, node.label)}
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-gray-100 rounded-lg">
+                      <div className="flex items-start space-x-3">
+                        <div className="p-2 bg-gray-50 rounded-lg flex-shrink-0">
                           <IconComponent className="h-4 w-4 text-gray-600" />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 space-y-1">
                           <p className="text-sm font-medium text-gray-900 truncate">
                             {node.label}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-gray-500 line-clamp-2">
                             {node.description}
                           </p>
+                          <Badge variant="outline" className="text-xs px-2 py-0.5">
+                            {node.type}
+                          </Badge>
                         </div>
-                        <Badge variant="outline" className="text-xs">
-                          {node.type}
-                        </Badge>
                       </div>
                     </Card>
                   );
@@ -98,6 +103,12 @@ const Sidebar = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+      
+      <div className="p-4 border-t border-gray-100 flex-shrink-0">
+        <div className="text-xs text-gray-500 text-center">
+          <p>Drag & drop nodes to build workflows</p>
         </div>
       </div>
     </div>
